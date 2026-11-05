@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MSA Jeopardy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#071f26;--teal:#0b3b3a;--emerald:#0f5a4f;--gold:#d9b660;--gold-d:#a8832f;--ivory:#f6efdc;--lapis:#12306b;--lapis-d:#0b1f4a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;color:var(--ivory);font-family:Amiri,"Times New Roman",serif;background-color:var(--teal);
+background-image:radial-gradient(ellipse at center,rgba(3,15,18,0) 35%,rgba(3,15,18,.75)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23d9b660' stroke-width='1' opacity='.5'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='11'/%3E%3Cpath d='M0 0L20 20M80 0L60 20M0 80L20 60M80 80L60 60M40 0V9M40 71V80M0 40H9M71 40H80'/%3E%3C/g%3E%3Cg fill='%23d9b660' opacity='.28'%3E%3Ccircle cx='0' cy='0' r='3'/%3E%3Ccircle cx='80' cy='0' r='3'/%3E%3Ccircle cx='0' cy='80' r='3'/%3E%3Ccircle cx='80' cy='80' r='3'/%3E%3Ccircle cx='40' cy='40' r='2.5'/%3E%3C/g%3E%3C/svg%3E");background-attachment:fixed}
+header{text-align:center;padding:18px 12px 6px}
+.bis{font-size:1.4rem;color:var(--gold);margin:0}
+h1{font-family:"Aref Ruqaa",Amiri,serif;font-weight:700;font-size:clamp(2.2rem,6vw,4rem);margin:0;color:var(--gold);text-shadow:0 2px 0 var(--night),0 0 24px rgba(217,182,96,.35);line-height:1.2}
+.tools{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+button{font-family:"Reem Kufi",Amiri,sans-serif;cursor:pointer;color:var(--ivory);background:var(--night);border:1.5px solid var(--gold-d);border-radius:6px;padding:7px 14px;font-size:.95rem}
+button:hover{border-color:var(--gold);color:var(--gold)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button.gold,button[aria-pressed=true]{background:linear-gradient(var(--gold),var(--gold-d));color:var(--night);border-color:var(--gold);font-weight:700}
+main{max-width:1200px;margin:0 auto;padding:10px 14px 28px}
+.frame{background:rgba(7,31,38,.86);border:2px solid var(--gold);padding:10px;box-shadow:0 0 0 5px var(--night),0 0 0 6px var(--gold-d),0 18px 40px rgba(0,0,0,.5);overflow-x:auto}
+#board{display:grid;gap:6px;min-width:780px}
+.cat{background:linear-gradient(var(--emerald),var(--teal));border:1.5px solid var(--gold);color:var(--ivory);font-family:"Reem Kufi",sans-serif;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;padding:10px 6px;min-height:72px;font-size:clamp(.85rem,1.7vw,1.25rem);line-height:1.2}
+.tile{min-height:clamp(60px,12vh,110px);background:linear-gradient(160deg,var(--lapis),var(--lapis-d));border:2px solid var(--gold-d);box-shadow:inset 0 0 0 3px var(--lapis-d),inset 0 0 0 4px var(--gold-d);color:var(--gold);font-weight:700;font-size:clamp(1.6rem,3.6vw,2.7rem);border-radius:4px;padding:0}
+.tile:hover:not(:disabled){background:linear-gradient(160deg,#1b46a0,var(--lapis));border-color:var(--gold);color:#fff3c9}
+.tile:disabled{background:rgba(7,31,38,.6);border-color:rgba(168,131,47,.25);box-shadow:none;cursor:default}
+#teams{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}
+.team{position:relative;width:200px;background:rgba(7,31,38,.9);border:2px solid var(--gold);padding:10px 10px 12px;text-align:center;box-shadow:0 0 0 4px var(--night),0 0 0 5px var(--gold-d)}
+.tn{width:100%;background:transparent;border:0;border-bottom:1px dashed var(--gold-d);color:var(--ivory);font:700 1.25rem Amiri,serif;text-align:center;padding:2px}
+.sc{font-family:"Reem Kufi",sans-serif;font-weight:700;font-size:2.8rem;color:var(--gold);line-height:1.2;width:100%;background:transparent;border:0;border-radius:4px;text-align:center;padding:0;-moz-appearance:textfield}.sc::-webkit-outer-spin-button,.sc::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.sc:hover{background:rgba(217,182,96,.1)}
+.sc.neg{color:#ff9d8a}
+.adj{display:flex;gap:6px;justify-content:center}
+.adj button{padding:3px 10px;font-size:.85rem}
+.x{position:absolute;top:2px;right:4px;border:0;background:none;padding:0 6px;font-size:1.3rem;color:var(--gold-d)}
+.ov{position:fixed;inset:0;background:rgba(3,15,18,.88);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10;overflow:auto}
+.ov[hidden]{display:none}
+.card{width:min(860px,100%);background:linear-gradient(160deg,var(--lapis),var(--lapis-d));border:3px solid var(--gold);box-shadow:0 0 0 6px var(--night),0 0 0 7px var(--gold-d);padding:22px;text-align:center;max-height:100%;overflow:auto}
+.meta{display:flex;justify-content:space-between;font-family:"Reem Kufi",sans-serif;color:var(--gold);font-size:1.15rem}
+#q{font-size:clamp(1.6rem,4.2vw,2.8rem);line-height:1.35;margin:22px 0;min-height:3em;display:flex;align-items:center;justify-content:center}
+#a{font-family:"Reem Kufi",sans-serif;font-size:clamp(1.5rem,3.6vw,2.4rem);color:var(--gold);margin:0 0 16px;padding:10px;border-top:1px solid var(--gold-d);border-bottom:1px solid var(--gold-d)}
+#a[hidden],#aw[hidden]{display:none}
+#aw{display:grid;gap:6px;margin-bottom:16px}
+.awt{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap}
+.awt span{min-width:120px;text-align:right;font-weight:700;font-size:1.1rem}
+.awt button.ok.on{background:#2f9e6b;color:#fff;border-color:#8be0b5}
+.awt button.no.on{background:#b4412f;color:#fff;border-color:#ffb3a5}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.wide{text-align:left;width:min(900px,100%)}
+.wide h2{font-family:"Aref Ruqaa",serif;color:var(--gold);margin:0 0 8px;font-size:2rem}
+.wide input,.wide textarea{background:var(--night);color:var(--ivory);border:1px solid var(--gold-d);border-radius:4px;padding:6px;font:1rem Amiri,serif;width:100%}
+fieldset{border:1px solid var(--gold-d);margin:12px 0;padding:8px 10px}
+legend{font-family:"Reem Kufi",sans-serif;color:var(--gold)}
+.er{display:grid;grid-template-columns:5rem 1fr 14rem;gap:8px;margin-top:6px;align-items:start}
+.er b{font-family:"Reem Kufi",sans-serif;color:var(--gold);padding-top:6px}
+.cn{font-weight:700;font-size:1.15rem}.qe{display:grid;gap:8px;margin:14px 0;text-align:left}.qe[hidden]{display:none}.qe input,.qe textarea{background:var(--night);color:var(--ivory);border:1px solid var(--gold-d);border-radius:4px;padding:6px;font:1.1rem Amiri,serif;width:100%}.qe input[type=number]{width:8rem}
+@media(max-width:640px){.er{grid-template-columns:1fr}.awt span{text-align:center;min-width:100%}}
+@media(prefers-reduced-motion:no-preference){.card{animation:pop .18s ease-out}@keyframes pop{from{transform:scale(.94);opacity:0}}}
+</style>
+</head>
+<body>
+<header>
+  <p class="bis" lang="ar" dir="rtl">بسم الله الرحمن الرحيم</p>
+  <h1 id="title">MSA Jeopardy</h1>
+  <div class="tools"><button id="edit">Edit questions</button><button id="addteam">Add team</button><button id="reset">Reset game</button></div>
+</header>
+<main>
+  <div class="frame"><div id="board"></div></div>
+  <div id="teams"></div>
+</main>
+
+<div class="ov" id="modal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="q">
+    <div class="meta"><span id="mc"></span><span id="mv"></span></div>
+    <p id="q"></p>
+    <p id="a" hidden></p>
+    <div id="aw" hidden></div>
+    <div class="qe" id="qe" hidden><label>Points <input id="qv" type="number" step="50"></label><textarea id="qq" rows="2" placeholder="Clue" aria-label="Clue"></textarea><input id="qa" placeholder="Answer" aria-label="Answer"></div>
+    <div class="row"><button id="rev" class="gold">Reveal answer</button><button id="qedit">Edit clue</button><button id="close">Back to board</button></div>
+  </div>
+</div>
+
+<div class="ov" id="ed" hidden>
+  <div class="card wide">
+    <h2>Edit questions</h2>
+    <label>Game title <input id="et"></label>
+    <div id="ef"></div>
+    <div class="row"><button id="restore">Restore starting questions</button><button id="edone" class="gold">Save and close</button></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const V=[100,200,300,400,500];
+const val=(i,r)=>S.cats[i].clues[r].v||V[r];
+const mk=(name,a)=>({name,clues:a.map(([q,a])=>({q,a}))});
+const SAMPLE=()=>({title:'MSA Jeopardy',rounds:[{used:{},cats:[
+mk("Qur’an Stories",[["A baby is placed in a river to save him, then grows up in Pharaoh’s own home. Who is he?", "Musa (AS). See Qur’an 28:7–13."], ["In Surah Al-Kahf, why does Khidr damage a boat belonging to poor workers?", "A king was seizing boats by force, and the damage would help save theirs. Qur’an 18:79."], ["Yusuf (AS) is finally offered release from prison, but he wants one thing investigated first. What?", "The accusations made against him. He wanted his innocence cleared. Qur’an 12:50–51."], ["How did Sulayman (AS) first hear about the queen and kingdom of Saba?", "A hoopoe brought him the news. Qur’an 27:20–28."], ["Khidr repairs a wall for a town that refused to feed him. What was hidden beneath it?", "A treasure meant for two orphan boys when they grew older. Qur’an 18:77–82."]]),
+mk("Connect the Clues",[["A palm tree, a newborn, and a baby speaking. Whose story is this?", "Maryam (AS). Qur’an 19:22–33."], ["A storm, a large fish, and a prayer made in darkness. Which prophet?", "Yunus (AS). Qur’an 21:87 and 37:139–148."], ["An ant, a missing bird, a letter, and a queen. Which prophet ties these together?", "Sulayman (AS). These events appear in Surah An-Naml."], ["A cave, two gardens, a damaged boat, and an iron barrier. Name the surah.", "Surah Al-Kahf (18)."], ["There are 114 surahs. One has no opening Bismillah, but another has one inside a verse. How many Bismillahs does that make altogether?", "114: 113 at the beginnings of surahs, plus one in An-Naml 27:30."]]),
+mk("Seerah",[["Before prophethood, what did the people of Makkah call the Prophet ﷺ because they trusted him?", "Al-Amin, the trustworthy."], ["Madinah is north of Makkah. Why did the Prophet ﷺ and Abu Bakr first head south during the Hijrah?", "To avoid the expected route and those searching for them. They hid in the Cave of Thawr."], ["Madinah was being attacked by a much larger army. What defensive idea did Salman al-Farisi suggest?", "Dig a trench around the vulnerable parts of the city."], ["At Uhud, what choice by some of the archers helped turn the battle around?", "They left their assigned positions, leaving the Muslims exposed."], ["After the treaty of Hudaybiyyah, Umm Salamah gave the Prophet ﷺ advice when the companions were hesitant. What did she suggest?", "He should carry out the ritual himself first, so they would follow his example. See Sahih al-Bukhari 2731."]]),
+mk("Trick Questions",[["Ant, bee, spider, hoopoe: one of these does not have a surah named after it. Which?", "The hoopoe. The others are An-Naml, An-Nahl, and Al-Ankabut."], ["True or false: The Qur’an calls Pharaoh’s wife Asiyah by name.", "False. Her name comes from Islamic tradition, but she is not named in the Qur’an."], ["Ibrahim (AS) asked Allah to show him how the dead are brought to life. Did that mean he did not believe?", "No. He said he believed but wanted his heart to be reassured. Qur’an 2:260."], ["Which companion is actually mentioned by name in the Qur’an: Abu Bakr, Umar, or Zayd ibn Harithah?", "Zayd ibn Harithah (RA). Qur’an 33:37."], ["A surah opens by saying Allah heard a woman speaking up about her husband. Which surah is it?", "Surah Al-Mujadilah (58), meaning “The Pleading Woman.”"]]),
+mk("Muslim World",[["Which country has the most Muslims: Saudi Arabia, Egypt, or Indonesia?", "Indonesia."], ["Which Spanish city is known for its great mosque that later became a cathedral?", "Córdoba."], ["The English word “algorithm” comes from the name of which Muslim mathematician?", "Al-Khwarizmi."], ["When Mansa Musa passed through Cairo on Hajj, what did he give away in such huge amounts that people still talk about it?", "Gold."], ["The Taj Mahal is not a palace. What was it built for, and which emperor commissioned it?", "A mausoleum for Mumtaz Mahal, commissioned by Mughal emperor Shah Jahan."]]),
+mk("Real Life",[["You forget you’re fasting and drink water. Do you have to restart your fast?", "No. If it was genuinely forgetful, continue fasting. Sahih al-Bukhari 1933."], ["A rumor about someone spreads in the group chat. What should you do before passing it on?", "Check whether it is true. See Qur’an 49:6."], ["Someone says, “It’s not backbiting if what I said is true.” Are they right?", "No. Speaking about someone in a way they dislike can be backbiting even if it is true. Sahih Muslim 2589."], ["True or false: Giving charity where people can see you automatically makes it showing off.", "False. Intention matters; Qur’an 2:271 discusses giving openly and privately."], ["The Prophet ﷺ said to help someone whether they are oppressed or doing the oppressing. How do you help the oppressor?", "Stop them from oppressing others. Sahih al-Bukhari 2444."]])
+]}]});
+let S=null;try{S=JSON.parse(localStorage.getItem('msaj_single_2026v2'))}catch(e){}
+if(!S||!S.rounds||S.rounds.length!==1)S={...SAMPLE(),teams:[{n:'Team 1',s:0},{n:'Team 2',s:0}],r:0};
+const link=()=>{S.cats=S.rounds[S.r].cats;S.used=S.rounds[S.r].used};
+S.r=0;link();
+const save=()=>{try{localStorage.setItem('msaj_single_2026v2',JSON.stringify({...S,cats:undefined,used:undefined}))}catch(e){}};
+
+function tabs(){document.querySelectorAll('[data-rd]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.rd===S.r))}
+function board(){tabs();
+  $('#title').textContent=S.title;document.title=S.title;
+  $('#board').style.gridTemplateColumns=`repeat(${S.cats.length},minmax(0,1fr))`;
+  let h=S.cats.map(c=>`<div class="cat">${esc(c.name)}</div>`).join('');
+  for(let r=0;r<5;r++)S.cats.forEach((c,i)=>{const k=i+'-'+r,u=S.used[k];
+    h+=`<button class="tile" data-i="${i}" data-r="${r}" ${u?'disabled':''} aria-label="${esc(c.name)} for ${val(i,r)}">${u?'':val(i,r)}</button>`});
+  $('#board').innerHTML=h;
+}
+function scores(){
+  $('#teams').innerHTML=S.teams.map((t,i)=>`<div class="team"><button class="x" data-rm="${i}" aria-label="Remove team">×</button><input class="tn" data-n="${i}" value="${esc(t.n)}" aria-label="Team name"><input class="sc ${t.s<0?'neg':''}" type="number" step="50" data-s="${i}" value="${t.s}" aria-label="Score for ${esc(t.n)}"><div class="adj"><button data-a="${i}" data-d="-100">−100</button><button data-a="${i}" data-d="100">+100</button></div></div>`).join('');
+}
+let cur=null;
+function awards(){
+  const v=val(cur.i,cur.r);
+  $('#aw').innerHTML=S.teams.map((t,i)=>`<div class="awt"><span>${esc(t.n)}</span><button class="ok ${cur.aw[i]>0?'on':''}" data-w="${i}" data-s="1">Correct +${v}</button><button class="no ${cur.aw[i]<0?'on':''}" data-w="${i}" data-s="-1">Wrong −${v}</button></div>`).join('');
+}
+function openClue(i,r){
+  cur={i,r,rev:false,aw:{}};const c=S.cats[i];
+  $('#mc').textContent=c.name;$('#mv').textContent=val(i,r);$('#qe').hidden=true;$('#qedit').textContent='Edit clue';
+  $('#q').textContent=c.clues[r].q;$('#a').textContent=c.clues[r].a;
+  $('#a').hidden=true;$('#aw').hidden=true;$('#rev').hidden=false;$('#close').textContent='Back to board';
+  $('#modal').hidden=false;$('#rev').focus();
+}
+function reveal(){
+  cur.rev=true;$('#qv').disabled=true;$('#a').hidden=false;$('#aw').hidden=false;$('#rev').hidden=true;
+  $('#close').textContent='Done';awards();$('#close').focus();
+}
+function closeClue(){
+  if(cur&&cur.rev)S.used[cur.i+'-'+cur.r]=1;board();save();
+  cur=null;$('#modal').hidden=true;
+}
+function editor(){
+  $('#et').value=S.title;$('#ed h2').textContent='Edit questions';
+  $('#ef').innerHTML=S.cats.map((c,i)=>`<fieldset><legend>Category ${i+1}</legend><input class="cn" data-c="${i}" value="${esc(c.name)}" aria-label="Category name">`+c.clues.map((x,r)=>`<div class="er"><input type="number" step="50" data-c="${i}" data-r="${r}" data-f="v" value="${val(i,r)}" aria-label="Points"><textarea rows="2" data-c="${i}" data-r="${r}" data-f="q" placeholder="Clue" aria-label="Clue">${esc(x.q)}</textarea><input data-c="${i}" data-r="${r}" data-f="a" value="${esc(x.a)}" placeholder="Answer" aria-label="Answer"></div>`).join('')+`</fieldset>`).join('');
+}
+
+$('#board').addEventListener('click',e=>{const t=e.target.closest('.tile');if(t&&!t.disabled)openClue(+t.dataset.i,+t.dataset.r)});
+$('#rev').onclick=reveal;$('#close').onclick=closeClue;
+$('#aw').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const i=+b.dataset.w,s=+b.dataset.s,v=val(cur.i,cur.r),old=cur.aw[i]||0,nw=old===s*v?0:s*v;
+  S.teams[i].s+=nw-old;cur.aw[i]=nw;scores();save();awards();
+});
+$('#teams').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.a!==undefined)S.teams[+b.dataset.a].s+=+b.dataset.d;
+  else if(b.dataset.rm!==undefined){if(S.teams.length<2)return;S.teams.splice(+b.dataset.rm,1)}
+  scores();save();
+});
+$('#teams').addEventListener('input',e=>{if(e.target.dataset.n!==undefined){S.teams[+e.target.dataset.n].n=e.target.value;save()}});
+$('#teams').addEventListener('change',e=>{const t=e.target;if(t.dataset.s!==undefined){const n=parseInt(t.value)||0;S.teams[+t.dataset.s].s=n;t.value=n;t.classList.toggle('neg',n<0);save()}});
+$('#teams').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('sc'))e.target.blur()});
+$('#qedit').onclick=function(){const q=$('#qe');q.hidden=!q.hidden;this.textContent=q.hidden?'Edit clue':'Done editing';if(!q.hidden){const cl=S.cats[cur.i].clues[cur.r];$('#qv').value=val(cur.i,cur.r);$('#qq').value=cl.q;$('#qa').value=cl.a;$('#qv').disabled=cur.rev}};
+$('#qe').addEventListener('input',e=>{const cl=S.cats[cur.i].clues[cur.r],id=e.target.id;if(id==='qq'){cl.q=e.target.value;$('#q').textContent=cl.q}else if(id==='qa'){cl.a=e.target.value;$('#a').textContent=cl.a}else{cl.v=parseInt(e.target.value)||0;$('#mv').textContent=val(cur.i,cur.r)}save()});
+
+$('#addteam').onclick=()=>{if(S.teams.length<8){S.teams.push({n:'Team '+(S.teams.length+1),s:0});scores();save()}};
+let rt=null;
+$('#reset').onclick=function(){
+  if(!rt){this.textContent='Click again to confirm';rt=setTimeout(()=>{rt=null;this.textContent='Reset game'},3000);return}
+  clearTimeout(rt);rt=null;this.textContent='Reset game';
+  S.rounds.forEach(x=>x.used={});link();S.teams.forEach(t=>t.s=0);board();scores();save();
+};
+$('#edit').onclick=()=>{editor();$('#ed').hidden=false};
+$('#edone').onclick=()=>{$('#ed').hidden=true;board()};
+$('#et').oninput=e=>{S.title=e.target.value;save()};
+$('#ef').addEventListener('input',e=>{
+  const t=e.target,c=+t.dataset.c;
+  if(t.classList.contains('cn'))S.cats[c].name=t.value;else{const cl=S.cats[c].clues[+t.dataset.r],f=t.dataset.f;cl[f]=f==='v'?(parseInt(t.value)||0):t.value}
+  save();
+});
+$('#restore').onclick=()=>{const d=SAMPLE();S.title=d.title;S.rounds=d.rounds;link();editor();board();save()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').hidden)closeClue();else if(!$('#ed').hidden){$('#ed').hidden=true;board()}}});
+board();scores();
+</script>
+</body>
+</html>
