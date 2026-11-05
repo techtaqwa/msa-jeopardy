@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MSA Jeopardy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#071f26;--teal:#0b3b3a;--emerald:#0f5a4f;--gold:#d9b660;--gold-d:#a8832f;--ivory:#f6efdc;--lapis:#12306b;--lapis-d:#0b1f4a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;color:var(--ivory);font-family:Amiri,"Times New Roman",serif;background-color:var(--teal);
+background-image:radial-gradient(ellipse at center,rgba(3,15,18,0) 35%,rgba(3,15,18,.75)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23d9b660' stroke-width='1' opacity='.5'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='11'/%3E%3Cpath d='M0 0L20 20M80 0L60 20M0 80L20 60M80 80L60 60M40 0V9M40 71V80M0 40H9M71 40H80'/%3E%3C/g%3E%3Cg fill='%23d9b660' opacity='.28'%3E%3Ccircle cx='0' cy='0' r='3'/%3E%3Ccircle cx='80' cy='0' r='3'/%3E%3Ccircle cx='0' cy='80' r='3'/%3E%3Ccircle cx='80' cy='80' r='3'/%3E%3Ccircle cx='40' cy='40' r='2.5'/%3E%3C/g%3E%3C/svg%3E");background-attachment:fixed}
+header{text-align:center;padding:18px 12px 6px}
+.bis{font-size:1.4rem;color:var(--gold);margin:0}
+h1{font-family:"Aref Ruqaa",Amiri,serif;font-weight:700;font-size:clamp(2.2rem,6vw,4rem);margin:0;color:var(--gold);text-shadow:0 2px 0 var(--night),0 0 24px rgba(217,182,96,.35);line-height:1.2}
+.tools{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+button{font-family:"Reem Kufi",Amiri,sans-serif;cursor:pointer;color:var(--ivory);background:var(--night);border:1.5px solid var(--gold-d);border-radius:6px;padding:7px 14px;font-size:.95rem}
+button:hover{border-color:var(--gold);color:var(--gold)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button.gold,button[aria-pressed=true]{background:linear-gradient(var(--gold),var(--gold-d));color:var(--night);border-color:var(--gold);font-weight:700}
+main{max-width:1200px;margin:0 auto;padding:10px 14px 28px}
+.frame{background:rgba(7,31,38,.86);border:2px solid var(--gold);padding:10px;box-shadow:0 0 0 5px var(--night),0 0 0 6px var(--gold-d),0 18px 40px rgba(0,0,0,.5);overflow-x:auto}
+#board{display:grid;gap:6px;min-width:780px}
+.cat{background:linear-gradient(var(--emerald),var(--teal));border:1.5px solid var(--gold);color:var(--ivory);font-family:"Reem Kufi",sans-serif;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;padding:10px 6px;min-height:72px;font-size:clamp(.85rem,1.7vw,1.25rem);line-height:1.2}
+.tile{min-height:clamp(60px,12vh,110px);background:linear-gradient(160deg,var(--lapis),var(--lapis-d));border:2px solid var(--gold-d);box-shadow:inset 0 0 0 3px var(--lapis-d),inset 0 0 0 4px var(--gold-d);color:var(--gold);font-weight:700;font-size:clamp(1.6rem,3.6vw,2.7rem);border-radius:4px;padding:0}
+.tile:hover:not(:disabled){background:linear-gradient(160deg,#1b46a0,var(--lapis));border-color:var(--gold);color:#fff3c9}
+.tile:disabled{background:rgba(7,31,38,.6);border-color:rgba(168,131,47,.25);box-shadow:none;cursor:default}
+#teams{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}
+.team{position:relative;width:200px;background:rgba(7,31,38,.9);border:2px solid var(--gold);padding:10px 10px 12px;text-align:center;box-shadow:0 0 0 4px var(--night),0 0 0 5px var(--gold-d)}
+.tn{width:100%;background:transparent;border:0;border-bottom:1px dashed var(--gold-d);color:var(--ivory);font:700 1.25rem Amiri,serif;text-align:center;padding:2px}
+.sc{font-family:"Reem Kufi",sans-serif;font-weight:700;font-size:2.8rem;color:var(--gold);line-height:1.2;width:100%;background:transparent;border:0;border-radius:4px;text-align:center;padding:0;-moz-appearance:textfield}.sc::-webkit-outer-spin-button,.sc::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.sc:hover{background:rgba(217,182,96,.1)}
+.sc.neg{color:#ff9d8a}
+.adj{display:flex;gap:6px;justify-content:center}
+.adj button{padding:3px 10px;font-size:.85rem}
+.x{position:absolute;top:2px;right:4px;border:0;background:none;padding:0 6px;font-size:1.3rem;color:var(--gold-d)}
+.ov{position:fixed;inset:0;background:rgba(3,15,18,.88);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10;overflow:auto}
+.ov[hidden]{display:none}
+.card{width:min(860px,100%);background:linear-gradient(160deg,var(--lapis),var(--lapis-d));border:3px solid var(--gold);box-shadow:0 0 0 6px var(--night),0 0 0 7px var(--gold-d);padding:22px;text-align:center;max-height:100%;overflow:auto}
+.meta{display:flex;justify-content:space-between;font-family:"Reem Kufi",sans-serif;color:var(--gold);font-size:1.15rem}
+#q{font-size:clamp(1.6rem,4.2vw,2.8rem);line-height:1.35;margin:22px 0;min-height:3em;display:flex;align-items:center;justify-content:center}
+#a{font-family:"Reem Kufi",sans-serif;font-size:clamp(1.5rem,3.6vw,2.4rem);color:var(--gold);margin:0 0 16px;padding:10px;border-top:1px solid var(--gold-d);border-bottom:1px solid var(--gold-d)}
+#a[hidden],#aw[hidden]{display:none}
+#aw{display:grid;gap:6px;margin-bottom:16px}
+.awt{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap}
+.awt span{min-width:120px;text-align:right;font-weight:700;font-size:1.1rem}
+.awt button.ok.on{background:#2f9e6b;color:#fff;border-color:#8be0b5}
+.awt button.no.on{background:#b4412f;color:#fff;border-color:#ffb3a5}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.wide{text-align:left;width:min(900px,100%)}
+.wide h2{font-family:"Aref Ruqaa",serif;color:var(--gold);margin:0 0 8px;font-size:2rem}
+.wide input,.wide textarea{background:var(--night);color:var(--ivory);border:1px solid var(--gold-d);border-radius:4px;padding:6px;font:1rem Amiri,serif;width:100%}
+fieldset{border:1px solid var(--gold-d);margin:12px 0;padding:8px 10px}
+legend{font-family:"Reem Kufi",sans-serif;color:var(--gold)}
+.er{display:grid;grid-template-columns:5rem 1fr 14rem;gap:8px;margin-top:6px;align-items:start}
+.er b{font-family:"Reem Kufi",sans-serif;color:var(--gold);padding-top:6px}
+.cn{font-weight:700;font-size:1.15rem}.qe{display:grid;gap:8px;margin:14px 0;text-align:left}.qe[hidden]{display:none}.qe input,.qe textarea{background:var(--night);color:var(--ivory);border:1px solid var(--gold-d);border-radius:4px;padding:6px;font:1.1rem Amiri,serif;width:100%}.qe input[type=number]{width:8rem}
+@media(max-width:640px){.er{grid-template-columns:1fr}.awt span{text-align:center;min-width:100%}}
+@media(prefers-reduced-motion:no-preference){.card{animation:pop .18s ease-out}@keyframes pop{from{transform:scale(.94);opacity:0}}}
+</style>
+</head>
+<body>
+<header>
+  <p class="bis" lang="ar" dir="rtl">بسم الله الرحمن الرحيم</p>
+  <h1 id="title">MSA Jeopardy</h1>
+  <div class="tools"><button data-rd="0" aria-pressed="true">Round 1</button><button data-rd="1" aria-pressed="false">Double Jeopardy</button><button id="edit">Edit questions</button><button id="addteam">Add team</button><button id="reset">Reset game</button></div>
+</header>
+<main>
+  <div class="frame"><div id="board"></div></div>
+  <div id="teams"></div>
+</main>
+
+<div class="ov" id="modal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="q">
+    <div class="meta"><span id="mc"></span><span id="mv"></span></div>
+    <p id="q"></p>
+    <p id="a" hidden></p>
+    <div id="aw" hidden></div>
+    <div class="qe" id="qe" hidden><label>Points <input id="qv" type="number" step="50"></label><textarea id="qq" rows="2" placeholder="Clue" aria-label="Clue"></textarea><input id="qa" placeholder="Answer" aria-label="Answer"></div>
+    <div class="row"><button id="rev" class="gold">Reveal answer</button><button id="qedit">Edit clue</button><button id="close">Back to board</button></div>
+  </div>
+</div>
+
+<div class="ov" id="ed" hidden>
+  <div class="card wide">
+    <h2>Edit questions</h2>
+    <label>Game title <input id="et"></label>
+    <div id="ef"></div>
+    <div class="row"><button id="restore">Restore sample questions (both rounds)</button><button id="edone" class="gold">Save and close</button></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const V=[100,200,300,400,500];
+const val=(i,r)=>S.cats[i].clues[r].v||V[r]*(S.r+1);
+const mk=(name,a)=>({name,clues:a.map(([q,a])=>({q,a}))});
+const SAMPLE=()=>({title:'MSA Jeopardy',rounds:[{used:{},cats:[
+mk('Islam Basics',[['How many pillars of Islam are there?','Five'],['How many pillars of Iman (faith) are there?','Six'],['The final messenger of Islam','Prophet Muhammad ﷺ'],['The literal meaning of the word “Islam”','Submission'],['In the Qur’an, the people referred to as Ahl al-Kitab (People of the Book)','Jews and Christians']]),
+mk('The Qur’an',[['The holy book of Islam','The Qur’an (Qur’an Karim)'],['The number of surahs in the Qur’an','114'],['The surah recited in every unit of the Muslim prayer','Surah Al-Fatiha'],['The one surah that does not begin with Bismillah','Surah At-Tawbah'],['The story of Dhul-Qarnayn trapping Yajuj and Majuj is found in this surah','Surah Al-Kahf']]),
+mk('Prophets & Companions',[['The first prophet','Prophet Adam (AS)'],['The Prophet’s ﷺ first wife','Khadijah bint Khuwaylid (RA)'],['The first caliph after the Prophet’s ﷺ death','Abu Bakr as-Siddiq (RA)'],['The third caliph of Islam','Uthman ibn Affan (RA)'],['Name five of the ten companions promised Jannah','Any five of: Abu Bakr, Umar, Uthman, Ali, Talha, Az-Zubayr, Abdur-Rahman ibn Awf, Sa’d ibn Abi Waqqas, Sa’id ibn Zayd, Abu Ubaydah ibn al-Jarrah']]),
+mk('Say It in Arabic',[['The Arabic word for “peace,” used as a greeting','Salam'],['The Arabic word for “prophet”','Nabi'],['The Islamic term for “charity”','Sadaqah'],['The Islamic term for the Day of Judgment','Yawm al-Qiyamah'],['The Pillars of Islam are also known by this Arabic name','Arkan al-Islam']]),
+mk('Worship & Angels',[['The direction Muslims face to pray','The Qibla (toward the Kaaba)'],['The ritual washing before prayer','Wudu'],['The day of congregational prayer','Friday (Jumu’ah)'],['The angel who delivered the Qur’an to the Prophet ﷺ','Jibreel (Gabriel)'],['The two angels who record our deeds','Kiraman Katibin']]),
+mk('Muslim Civilizations',[['The country with the world’s largest Muslim population','Indonesia'],['The city founded in 762 CE as the Abbasid capital, home to the House of Wisdom','Baghdad'],['The Mughal emperor who built the Taj Mahal','Shah Jahan'],['The Spanish city that was the capital of Umayyad Al-Andalus, famed for its Great Mosque','Córdoba'],['The dynasty that founded Cairo and the Al-Azhar mosque in the 10th century','The Fatimids']]),
+mk('Legends of Islam',[['The scribe who recorded the revelation for the Prophet ﷺ','Zayd ibn Thabit (RA)'],['The first martyr in Islam','Sumayyah bint Khayyat (RA)'],['The Persian scholar whose name gave us the word “algorithm” and who helped found algebra','Al-Khwarizmi'],['The Ayyubid sultan who recaptured Jerusalem in 1187','Salah ad-Din (Saladin)'],['The woman who founded the University of al-Qarawiyyin in Fez in 859 CE','Fatima al-Fihri']])
+]},{used:{},cats:[
+mk('Prophets & Revelation',[['The number of prophets mentioned by name in the Qur’an','25'],['The Prophet’s ﷺ night journey from Makkah to Jerusalem and ascent to the heavens','Isra and Mi’raj'],['The prophet mentioned by name most often in the Qur’an','Musa (Moses)'],['The prophet swallowed by a great fish','Yunus (Jonah)'],['Name the five Ulul-Azm, the Messengers of Resolve','Nuh, Ibrahim, Musa, Isa, and Muhammad (peace be upon them)']]),
+mk('Islamic Terms',[['The Arabic word for the call to prayer','Athan (Adhan)'],['The Islamic term for permitted things, such as the dietary laws','Halal'],['The Arabic word for the global community of believers','Ummah'],['The Islamic term for Islamic law','Sharia'],['The literal meaning of the word “Jihad”','Struggle or striving']]),
+mk('Sacred Places & Time',[['The holiest city in Islam','Makkah'],['The second holiest city in Islam','Madinah'],['The name of the Islamic calendar','The Hijri calendar'],['The migration of the Prophet ﷺ and his followers from Makkah to Madinah in 622 CE','The Hijrah'],['The third holiest site in Islam, located in Jerusalem','Al-Aqsa Mosque']]),
+mk('Qur’an Deep Dive',[['The number of Juz in the Qur’an','30'],['The famous verse in Surah Al-Baqarah known as the Throne Verse','Ayat al-Kursi'],['The surah named after the mother of a prophet','Surah Maryam'],['The longest surah in the Qur’an','Surah Al-Baqarah'],['The shortest surah in the Qur’an','Surah Al-Kawthar']]),
+mk('Abbasids & the Golden Age',[['The dynasty the Abbasids overthrew in 750 CE','The Umayyads'],['The Baghdad center of learning that translated Greek, Persian, and Indian works','The House of Wisdom (Bayt al-Hikma)'],['The physician known as Avicenna, author of The Canon of Medicine','Ibn Sina'],['The Mongol leader who sacked Baghdad in 1258','Hulagu Khan'],['The scientist called the father of optics, author of the Book of Optics','Ibn al-Haytham (Alhazen)']]),
+mk('Empires & Rulers',[['The founder of the Mughal Empire, who won at Panipat in 1526','Babur'],['The Ottoman sultan who conquered Constantinople in 1453','Mehmed II (Muhammad al-Fatih)'],['The Ottoman sultan known as Kanuni, “the Lawgiver,” who ruled from 1520 to 1566','Suleiman the Magnificent'],['The master architect behind the Süleymaniye Mosque','Mimar Sinan'],['The Mali emperor whose 1324 pilgrimage to Makkah flooded Cairo with so much gold that its value dropped','Mansa Musa']]),
+mk('Andalus & Explorers',[['The companion who was the first muezzin of Islam','Bilal ibn Rabah (RA)'],['The Moroccan traveler who wrote the Rihla after journeying across the Muslim world','Ibn Battuta'],['The commander who crossed into Iberia in 711 CE; Gibraltar is named after him','Tariq ibn Ziyad'],['The dynasty that built the Alhambra in Granada','The Nasrids'],['The Umayyad prince who escaped the Abbasids and founded an emirate in Córdoba in 756 CE','Abd ar-Rahman I']])
+]}]});
+let S=null;try{S=JSON.parse(localStorage.getItem('msaj3'))}catch(e){}
+if(!S||!S.rounds)S={...SAMPLE(),teams:[{n:'Team 1',s:0},{n:'Team 2',s:0}],r:0};
+const link=()=>{S.cats=S.rounds[S.r].cats;S.used=S.rounds[S.r].used};
+S.r=S.r||0;link();
+const save=()=>{try{localStorage.setItem('msaj3',JSON.stringify({...S,cats:undefined,used:undefined}))}catch(e){}};
+
+function tabs(){document.querySelectorAll('[data-rd]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.rd===S.r))}
+function board(){tabs();
+  $('#title').textContent=S.title;document.title=S.title;
+  $('#board').style.gridTemplateColumns=`repeat(${S.cats.length},minmax(0,1fr))`;
+  let h=S.cats.map(c=>`<div class="cat">${esc(c.name)}</div>`).join('');
+  for(let r=0;r<5;r++)S.cats.forEach((c,i)=>{const k=i+'-'+r,u=S.used[k];
+    h+=`<button class="tile" data-i="${i}" data-r="${r}" ${u?'disabled':''} aria-label="${esc(c.name)} for ${val(i,r)}">${u?'':val(i,r)}</button>`});
+  $('#board').innerHTML=h;
+}
+function scores(){
+  $('#teams').innerHTML=S.teams.map((t,i)=>`<div class="team"><button class="x" data-rm="${i}" aria-label="Remove team">×</button><input class="tn" data-n="${i}" value="${esc(t.n)}" aria-label="Team name"><input class="sc ${t.s<0?'neg':''}" type="number" step="50" data-s="${i}" value="${t.s}" aria-label="Score for ${esc(t.n)}"><div class="adj"><button data-a="${i}" data-d="-100">−100</button><button data-a="${i}" data-d="100">+100</button></div></div>`).join('');
+}
+let cur=null;
+function awards(){
+  const v=val(cur.i,cur.r);
+  $('#aw').innerHTML=S.teams.map((t,i)=>`<div class="awt"><span>${esc(t.n)}</span><button class="ok ${cur.aw[i]>0?'on':''}" data-w="${i}" data-s="1">Correct +${v}</button><button class="no ${cur.aw[i]<0?'on':''}" data-w="${i}" data-s="-1">Wrong −${v}</button></div>`).join('');
+}
+function openClue(i,r){
+  cur={i,r,rev:false,aw:{}};const c=S.cats[i];
+  $('#mc').textContent=c.name;$('#mv').textContent=val(i,r);$('#qe').hidden=true;$('#qedit').textContent='Edit clue';
+  $('#q').textContent=c.clues[r].q;$('#a').textContent=c.clues[r].a;
+  $('#a').hidden=true;$('#aw').hidden=true;$('#rev').hidden=false;$('#close').textContent='Back to board';
+  $('#modal').hidden=false;$('#rev').focus();
+}
+function reveal(){
+  cur.rev=true;$('#qv').disabled=true;$('#a').hidden=false;$('#aw').hidden=false;$('#rev').hidden=true;
+  $('#close').textContent='Done';awards();$('#close').focus();
+}
+function closeClue(){
+  if(cur&&cur.rev)S.used[cur.i+'-'+cur.r]=1;board();save();
+  cur=null;$('#modal').hidden=true;
+}
+function editor(){
+  $('#et').value=S.title;$('#ed h2').textContent='Edit questions: '+(S.r?'Double Jeopardy':'Round 1');
+  $('#ef').innerHTML=S.cats.map((c,i)=>`<fieldset><legend>Category ${i+1}</legend><input class="cn" data-c="${i}" value="${esc(c.name)}" aria-label="Category name">`+c.clues.map((x,r)=>`<div class="er"><input type="number" step="50" data-c="${i}" data-r="${r}" data-f="v" value="${val(i,r)}" aria-label="Points"><textarea rows="2" data-c="${i}" data-r="${r}" data-f="q" placeholder="Clue" aria-label="Clue">${esc(x.q)}</textarea><input data-c="${i}" data-r="${r}" data-f="a" value="${esc(x.a)}" placeholder="Answer" aria-label="Answer"></div>`).join('')+`</fieldset>`).join('');
+}
+
+$('#board').addEventListener('click',e=>{const t=e.target.closest('.tile');if(t&&!t.disabled)openClue(+t.dataset.i,+t.dataset.r)});
+$('#rev').onclick=reveal;$('#close').onclick=closeClue;
+$('#aw').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const i=+b.dataset.w,s=+b.dataset.s,v=val(cur.i,cur.r),old=cur.aw[i]||0,nw=old===s*v?0:s*v;
+  S.teams[i].s+=nw-old;cur.aw[i]=nw;scores();save();awards();
+});
+$('#teams').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.a!==undefined)S.teams[+b.dataset.a].s+=+b.dataset.d;
+  else if(b.dataset.rm!==undefined){if(S.teams.length<2)return;S.teams.splice(+b.dataset.rm,1)}
+  scores();save();
+});
+$('#teams').addEventListener('input',e=>{if(e.target.dataset.n!==undefined){S.teams[+e.target.dataset.n].n=e.target.value;save()}});
+$('#teams').addEventListener('change',e=>{const t=e.target;if(t.dataset.s!==undefined){const n=parseInt(t.value)||0;S.teams[+t.dataset.s].s=n;t.value=n;t.classList.toggle('neg',n<0);save()}});
+$('#teams').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('sc'))e.target.blur()});
+$('#qedit').onclick=function(){const q=$('#qe');q.hidden=!q.hidden;this.textContent=q.hidden?'Edit clue':'Done editing';if(!q.hidden){const cl=S.cats[cur.i].clues[cur.r];$('#qv').value=val(cur.i,cur.r);$('#qq').value=cl.q;$('#qa').value=cl.a;$('#qv').disabled=cur.rev}};
+$('#qe').addEventListener('input',e=>{const cl=S.cats[cur.i].clues[cur.r],id=e.target.id;if(id==='qq'){cl.q=e.target.value;$('#q').textContent=cl.q}else if(id==='qa'){cl.a=e.target.value;$('#a').textContent=cl.a}else{cl.v=parseInt(e.target.value)||0;$('#mv').textContent=val(cur.i,cur.r)}save()});
+document.querySelector('.tools').addEventListener('click',e=>{const b=e.target.closest('[data-rd]');if(!b||cur)return;S.r=+b.dataset.rd;link();board();save()});
+$('#addteam').onclick=()=>{if(S.teams.length<8){S.teams.push({n:'Team '+(S.teams.length+1),s:0});scores();save()}};
+let rt=null;
+$('#reset').onclick=function(){
+  if(!rt){this.textContent='Click again to confirm';rt=setTimeout(()=>{rt=null;this.textContent='Reset game'},3000);return}
+  clearTimeout(rt);rt=null;this.textContent='Reset game';
+  S.rounds.forEach(x=>x.used={});link();S.teams.forEach(t=>t.s=0);board();scores();save();
+};
+$('#edit').onclick=()=>{editor();$('#ed').hidden=false};
+$('#edone').onclick=()=>{$('#ed').hidden=true;board()};
+$('#et').oninput=e=>{S.title=e.target.value;save()};
+$('#ef').addEventListener('input',e=>{
+  const t=e.target,c=+t.dataset.c;
+  if(t.classList.contains('cn'))S.cats[c].name=t.value;else{const cl=S.cats[c].clues[+t.dataset.r],f=t.dataset.f;cl[f]=f==='v'?(parseInt(t.value)||0):t.value}
+  save();
+});
+$('#restore').onclick=()=>{const d=SAMPLE();S.title=d.title;S.rounds=d.rounds;link();editor();board();save()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').hidden)closeClue();else if(!$('#ed').hidden){$('#ed').hidden=true;board()}}});
+board();scores();
+</script>
+</body>
+</html>
